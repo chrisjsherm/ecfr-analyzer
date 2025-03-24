@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getAgencies } from "./actions/agencies";
-import { AgencyDropdown } from "./components/AgencyDropdown";
+import ChangeCount from "./components/ChangeCount";
 
 export default async function Home() {
   const { agencies } = await getAgencies();
@@ -11,7 +11,7 @@ export default async function Home() {
         <h1 className="text-3xl font-bold mb-8">eCFR Agencies</h1>
 
         <div className="w-full">
-          <AgencyDropdown agencies={agencies} />
+          <ChangeCount agencies={agencies} />
         </div>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
