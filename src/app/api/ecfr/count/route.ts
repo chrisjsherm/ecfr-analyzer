@@ -1,22 +1,19 @@
 import { NextResponse } from "next/server";
+import { isValidDateFormat } from "../../../../utils/date.utils";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const agencySlugs = searchParams.getAll("agency_slugs[]");
   const lastModified = searchParams.get("last_modified_on_or_after");
 
-  // Validate date format if lastModified is provided
-  if (lastModified) {
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(lastModified)) {
-      return NextResponse.json(
-        { error: "Invalid date format. Please use YYYY-MM-DD" },
-        { status: 400 }
-      );
-    }
+  if (lastModified && !isValidDateFormat(lastModified)) {
+    return NextResponse.json(
+      { error: "Invalid date format. Please use YYYY-MM-DD" },
+      { status: 400 }
+    );
   }
 
-  const ecfrUrl = `https://ecfr.gov/api/search/v1/count?${agencySlugs
+  const ecfrUrl = `${process.env.ECFR_API_URL}/count?${agencySlugs
     .map((slug) => `agency_slugs[]=${slug}`)
     .join("&")}${
     lastModified ? `&last_modified_on_or_after=${lastModified}` : ""
