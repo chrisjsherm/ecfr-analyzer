@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getAgencies } from "./actions/agencies";
-import { Agency } from "./types/agency";
+import { AgencyDropdown } from "./components/AgencyDropdown";
 
 export default async function Home() {
   const { agencies } = await getAgencies();
@@ -11,24 +11,7 @@ export default async function Home() {
         <h1 className="text-3xl font-bold mb-8">eCFR Agencies</h1>
 
         <div className="w-full">
-          <div className="grid gap-4">
-            {agencies.map((agency: Agency) => (
-              <div
-                key={agency.slug}
-                className="p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-              >
-                <h2 className="text-xl font-semibold">{agency.name}</h2>
-                <div className="mt-2 flex gap-4 text-sm">
-                  <span className="text-gray-500 dark:text-gray-500">
-                    Short name: {agency.short_name}
-                  </span>
-                  <span className="text-gray-500 dark:text-gray-500">
-                    Slug: {agency.slug}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+          <AgencyDropdown agencies={agencies} />
         </div>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
