@@ -27,31 +27,36 @@ export async function GET(request: Request) {
     );
   }
 
-  // Build query parameters
-  const queryParams = [
-    ...agencySlugs.map((slug) => `agency_slugs[]=${encodeURIComponent(slug)}`),
-    startDate && `last_modified_on_or_after=${startDate}`,
-    endDate && `last_modified_on_or_before=${endDate}`,
-    query && `query=${encodeURIComponent(query)}`,
-  ]
-    .filter(Boolean)
-    .join("&");
-
-  const ecfrUrl = `${process.env.ECFR_API_URL}/counts/daily?${queryParams}`;
-
   try {
-    const response = await fetch(ecfrUrl);
-    const data: APIResponse = await response.json();
+    // Make separate API calls for each agency
+    const promises = agencySlugs.map(async (slug) => {
+      const queryParams = [
+        `agency_slugs[]=${encodeURIComponent(slug)}`,
+        startDate && `last_modified_on_or_after=${startDate}`,
+        endDate && `last_modified_on_or_before=${endDate}`,
+        query && `query=${encodeURIComponent(query)}`,
+      ]
+        .filter(Boolean)
+        .join("&");
 
-    // Transform the data into the format expected by the chart
-    const counts = Object.entries(data.dates)
-      .map(([date, count]) => ({
-        date,
-        count,
-      }))
-      .sort((a, b) => a.date.localeCompare(b.date)); // Sort by date ascending
+      const ecfrUrl = `${process.env.ECFR_API_URL}/counts/daily?${queryParams}`;
+      const response = await fetch(ecfrUrl);
+      const data: APIResponse = await response.json();
 
-    return NextResponse.json({ counts });
+      // Transform the data and include the agency slug
+      return {
+        agency: slug,
+        counts: Object.entries(data.dates)
+          .map(([date, count]) => ({
+            date,
+            count,
+          }))
+          .sort((a, b) => a.date.localeCompare(b.date)),
+      };
+    });
+
+    const results = await Promise.all(promises);
+    return NextResponse.json({ series: results });
   } catch (error) {
     console.error("Error fetching from eCFR:", error);
     return NextResponse.json(

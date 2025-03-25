@@ -53,10 +53,14 @@ export default function ChangeCount({ agencies }: { agencies: Agency[] }) {
     }
   }
 
-  function handleAgencySelect(agency: Agency) {
-    selectedAgency.current = agency;
-    if (agency && selectedDate.current) {
-      fetchChangeCount(agency, selectedDate.current, searchTerm.current);
+  function handleAgencySelect(agencies: Agency[]) {
+    selectedAgency.current = agencies[0];
+    if (selectedAgency.current && selectedDate.current) {
+      fetchChangeCount(
+        selectedAgency.current,
+        selectedDate.current,
+        searchTerm.current
+      );
     }
   }
 

@@ -21,18 +21,24 @@ import { useRef, useState } from "react";
 import { debounce } from "../../utils/debounce.utils";
 import { Agency } from "../types/agency";
 import { AgencyDropdown } from "./AgencyDropdown";
+
 interface DailyCount {
   date: string;
   count: number;
 }
 
+interface AgencyCounts {
+  agency: string;
+  counts: DailyCount[];
+}
+
 export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
-  const [dailyCounts, setDailyCounts] = useState<DailyCount[]>([]);
+  const [seriesData, setSeriesData] = useState<AgencyCounts[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchCtrl = useRef<AbortController | null>(null);
-  const selectedAgency = useRef<Agency | null>(null);
+  const selectedAgencies = useRef<Agency[]>([]);
   const dateRange = useRef<Date[]>([
     new Date(new Date().setDate(new Date().getDate() - 30)),
     new Date(),
@@ -40,7 +46,7 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
   const searchTerm = useRef<string>("");
 
   async function fetchDailyCounts(
-    agency: Agency,
+    agencies: Agency[],
     startDate: Date,
     endDate: Date,
     query?: string
@@ -55,9 +61,11 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
       const formattedStartDate = startDate.toISOString().split("T")[0];
       const formattedEndDate = endDate.toISOString().split("T")[0];
       const response = await fetch(
-        `/api/ecfr/daily-counts?agency_slugs[]=${
-          agency.slug
-        }&last_modified_on_or_after=${formattedStartDate}&last_modified_on_or_before=${formattedEndDate}${
+        `/api/ecfr/daily-counts?${agencies
+          .map((agency) => `agency_slugs[]=${agency.slug}`)
+          .join(
+            "&"
+          )}&last_modified_on_or_after=${formattedStartDate}&last_modified_on_or_before=${formattedEndDate}${
           query ? `&query=${query}` : ""
         }`,
         { signal: fetchCtrl.current.signal }
@@ -66,20 +74,20 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
         throw new Error("Failed to fetch daily counts");
       }
       const json = await response.json();
-      setDailyCounts(json.counts);
+      setSeriesData(json.series);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
-      setDailyCounts([]);
+      setSeriesData([]);
     } finally {
       setIsLoading(false);
     }
   }
 
-  function handleAgencySelect(agency: Agency) {
-    selectedAgency.current = agency;
-    if (agency && dateRange.current) {
+  function handleAgencySelect(agencies: Agency[]) {
+    selectedAgencies.current = agencies;
+    if (selectedAgencies.current.length > 0 && dateRange.current) {
       fetchDailyCounts(
-        agency,
+        selectedAgencies.current,
         dateRange.current[0],
         dateRange.current[1],
         searchTerm.current
@@ -90,9 +98,9 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
   function handleDateRangeChange(args: ChangedEventArgs) {
     if (args.value && Array.isArray(args.value) && args.value.length === 2) {
       dateRange.current = [args.value[0], args.value[1]];
-      if (selectedAgency.current) {
+      if (selectedAgencies.current.length > 0) {
         fetchDailyCounts(
-          selectedAgency.current,
+          selectedAgencies.current,
           args.value[0],
           args.value[1],
           searchTerm.current
@@ -103,9 +111,9 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
 
   function handleSearchChange(args: { value: string }) {
     searchTerm.current = args.value;
-    if (selectedAgency.current && dateRange.current) {
+    if (selectedAgencies.current.length > 0 && dateRange.current) {
       fetchDailyCounts(
-        selectedAgency.current,
+        selectedAgencies.current,
         dateRange.current[0],
         dateRange.current[1],
         searchTerm.current
@@ -132,7 +140,11 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
             </span>
           </TooltipComponent>
         </label>
-        <AgencyDropdown agencies={agencies} onSelect={handleAgencySelect} />
+        <AgencyDropdown
+          agencies={agencies}
+          onSelect={handleAgencySelect}
+          selectMultiple={true}
+        />
       </div>
 
       <div className="mb-4">
@@ -182,7 +194,7 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
           <p>Loading...</p>
         ) : error ? (
           <p className="text-red-600">{error}</p>
-        ) : dailyCounts.length > 0 ? (
+        ) : seriesData.length > 0 ? (
           <ChartComponent
             id="charts"
             title="Regulation Changes"
@@ -205,25 +217,31 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
               services={[LineSeries, DateTime, Legend, Tooltip, DataLabel]}
             />
             <SeriesCollectionDirective>
-              <SeriesDirective
-                dataSource={dailyCounts}
-                xName="date"
-                yName="count"
-                name={selectedAgency.current?.short_name || "Changes"}
-                type="Line"
-                marker={{
-                  visible: true,
-                  dataLabel: {
-                    visible: false,
-                  },
-                }}
-              />
+              {seriesData.map((series) => (
+                <SeriesDirective
+                  key={series.agency}
+                  dataSource={series.counts}
+                  xName="date"
+                  yName="count"
+                  name={
+                    agencies.find((a) => a.slug === series.agency)
+                      ?.short_name || series.agency
+                  }
+                  type="Line"
+                  marker={{
+                    visible: true,
+                    dataLabel: {
+                      visible: false,
+                    },
+                  }}
+                />
+              ))}
             </SeriesCollectionDirective>
           </ChartComponent>
         ) : (
           <p className="text-gray-500">
-            {selectedAgency.current && dateRange.current
-              ? "No changes found for this agency and date range."
+            {selectedAgencies.current.length > 0 && dateRange.current
+              ? "No changes found for this date range."
               : "Select an agency and date range to see the change history."}
           </p>
         )}
