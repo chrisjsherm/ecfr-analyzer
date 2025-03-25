@@ -23,7 +23,9 @@ export default function ChangeCount({ agencies }: { agencies: Agency[] }) {
   const [error, setError] = useState<string | null>(null);
 
   const fetchCtrl = useRef<AbortController | null>(null);
-  const selectedDate = useRef<Date>(new Date());
+  const selectedDate = useRef<Date>(
+    new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+  );
   const selectedAgency = useRef<Agency | null>(null);
   const searchTerm = useRef<string>("");
 
