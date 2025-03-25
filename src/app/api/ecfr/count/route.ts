@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { isValidDateFormat } from "../../../../utils/date.utils";
 
+/**
+ * Get the total change count for one or more agencies
+ * @param request - The request object
+ * @returns The change count for the given agency and date
+ */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const agencySlugs = searchParams.getAll("agency_slugs[]");

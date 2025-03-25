@@ -13,6 +13,10 @@ import { AgencyDropdown } from "./AgencyDropdown";
 
 const maxChangeCount = 10000;
 
+/**
+ * Display the number of changes for a given agency and date
+ * @param agencies - The list of agencies to display in the dropdown
+ */
 export default function ChangeCount({ agencies }: { agencies: Agency[] }) {
   const [changeCount, setChangeCount] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);

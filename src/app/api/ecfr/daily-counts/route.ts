@@ -9,6 +9,11 @@ interface APIResponse {
   dates: DateCounts;
 }
 
+/**
+ * Get the change counts by day for one or more agencies
+ * @param request - The request object
+ * @returns The daily counts for the given agency and date range
+ */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const agencySlugs = searchParams.getAll("agency_slugs[]");

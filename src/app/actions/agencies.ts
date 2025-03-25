@@ -1,5 +1,9 @@
 import { unstable_cache } from "next/cache";
 
+/**
+ * Memoized list of agencies from the eCFR API
+ * @returns The list of agencies
+ */
 export const getAgencies = unstable_cache(
   async () => {
     return getAgenciesData();
@@ -10,6 +14,10 @@ export const getAgencies = unstable_cache(
   }
 );
 
+/**
+ * Get the list of agencies from the eCFR API
+ * @returns The list of agencies
+ */
 const getAgenciesData = async () => {
   const response = await fetch("https://ecfr.gov/api/admin/v1/agencies.json");
 

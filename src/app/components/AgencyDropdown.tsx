@@ -14,6 +14,12 @@ interface Props {
   selectMultiple?: boolean;
 }
 
+/**
+ * AgencyDropdown component
+ * @param agencies - The list of agencies to display in the dropdown
+ * @param onSelect - The function to call when an agency is selected
+ * @param selectMultiple - Whether to allow multiple agency selections
+ */
 export function AgencyDropdown({
   agencies,
   onSelect,

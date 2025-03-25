@@ -32,6 +32,10 @@ interface AgencyCounts {
   counts: DailyCount[];
 }
 
+/**
+ * Display a chart of the number of changes for one or more agencies over a date range
+ * @param agencies - The list of agencies to display in the dropdown
+ */
 export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
   const [seriesData, setSeriesData] = useState<AgencyCounts[]>([]);
   const [isLoading, setIsLoading] = useState(false);
