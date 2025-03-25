@@ -5,6 +5,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const agencySlugs = searchParams.getAll("agency_slugs[]");
   const lastModified = searchParams.get("last_modified_on_or_after");
+  const query = searchParams.get("query");
 
   if (lastModified && !isValidDateFormat(lastModified)) {
     return NextResponse.json(
@@ -14,10 +15,10 @@ export async function GET(request: Request) {
   }
 
   const ecfrUrl = `${process.env.ECFR_API_URL}/count?${agencySlugs
-    .map((slug) => `agency_slugs[]=${slug}`)
+    .map((slug) => `agency_slugs[]=${encodeURIComponent(slug)}`)
     .join("&")}${
     lastModified ? `&last_modified_on_or_after=${lastModified}` : ""
-  }`;
+  }${query ? `&query=${encodeURIComponent(query)}` : ""}`;
 
   try {
     const response = await fetch(ecfrUrl);
