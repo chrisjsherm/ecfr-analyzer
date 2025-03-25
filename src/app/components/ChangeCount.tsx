@@ -73,6 +73,7 @@ export default function ChangeCount({ agencies }: { agencies: Agency[] }) {
           id="calendar"
           value={selectedDate}
           max={new Date()}
+          min={new Date(process.env.NEXT_PUBLIC_MIN_DATE ?? "2017-01-01")}
           onChange={handleDateChange}
         />
       </div>

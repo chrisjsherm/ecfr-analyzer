@@ -96,6 +96,7 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
           id="daterange"
           value={dateRange}
           max={new Date()}
+          min={new Date(process.env.NEXT_PUBLIC_MIN_DATE ?? "2017-01-01")}
           minDays={3}
           maxDays={365}
           strictMode={true}
