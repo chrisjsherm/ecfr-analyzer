@@ -183,7 +183,7 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
 
       <div className="mb-4">
         <label htmlFor="searchTerm" className="flex text-sm font-medium mb-2">
-          Search term
+          Search Term
         </label>
         <TextBoxComponent
           id="searchTerm"

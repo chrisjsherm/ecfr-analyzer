@@ -113,7 +113,7 @@ export default function ChangeCount({ agencies }: { agencies: Agency[] }) {
 
       <div className="mb-4">
         <label htmlFor="calendar" className="flex text-sm font-medium mb-2">
-          Changes From Date
+          Changes from Date
           <TooltipComponent content="Required field" target="#date-required">
             <span
               id="date-required"
@@ -136,7 +136,7 @@ export default function ChangeCount({ agencies }: { agencies: Agency[] }) {
 
       <div className="mb-4">
         <label htmlFor="searchTerm" className="flex text-sm font-medium mb-2">
-          Search term
+          Search Term
           <TooltipComponent
             content="Searches both headings and full text"
             target="#search-info"
