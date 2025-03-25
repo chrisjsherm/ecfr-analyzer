@@ -39,7 +39,7 @@ export function AgencyDropdown({
         dataSource={agencies as unknown as { [key: string]: object }[]}
         fields={{ text: "name" }}
         allowObjectBinding={true}
-        placeholder="Select an agency"
+        placeholder="Select one or more agencies"
         filterBarPlaceholder="Search agencies"
         allowFiltering={true}
         filterType="Contains"
