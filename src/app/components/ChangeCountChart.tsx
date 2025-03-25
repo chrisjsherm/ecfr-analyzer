@@ -132,7 +132,7 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
           htmlFor="agency-dropdown"
           className="flex text-sm font-medium mb-2"
         >
-          Agency
+          Agencies
           <TooltipComponent content="Required field" target="#agency-required">
             <span
               id="agency-required"
