@@ -16,7 +16,7 @@ import {
   Tooltip,
 } from "@syncfusion/ej2-react-charts";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Agency } from "../types/agency";
 import { AgencyDropdown } from "./AgencyDropdown";
 
@@ -29,11 +29,13 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
   const [dailyCounts, setDailyCounts] = useState<DailyCount[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [dateRange, setDateRange] = useState<[Date, Date]>([
-    new Date(new Date().setMonth(new Date().getMonth() - 1)), // Default to last month
+
+  const fetchCtrl = useRef<AbortController | null>(null);
+  const selectedAgency = useRef<Agency | null>(null);
+  const dateRange = useRef<Date[]>([
+    new Date(new Date().setDate(new Date().getDate() - 30)),
     new Date(),
   ]);
-  const [selectedAgency, setSelectedAgency] = useState<Agency | null>(null);
 
   async function fetchDailyCounts(
     agency: Agency,
@@ -42,11 +44,16 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
   ) {
     setIsLoading(true);
     setError(null);
+    if (fetchCtrl.current) {
+      fetchCtrl.current.abort();
+    }
     try {
+      fetchCtrl.current = new AbortController();
       const formattedStartDate = startDate.toISOString().split("T")[0];
       const formattedEndDate = endDate.toISOString().split("T")[0];
       const response = await fetch(
-        `/api/ecfr/daily-counts?agency_slugs[]=${agency.slug}&last_modified_on_or_after=${formattedStartDate}&last_modified_on_or_before=${formattedEndDate}`
+        `/api/ecfr/daily-counts?agency_slugs[]=${agency.slug}&last_modified_on_or_after=${formattedStartDate}&last_modified_on_or_before=${formattedEndDate}`,
+        { signal: fetchCtrl.current.signal }
       );
       if (!response.ok) {
         throw new Error("Failed to fetch daily counts");
@@ -62,17 +69,17 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
   }
 
   function handleAgencySelect(agency: Agency) {
-    setSelectedAgency(agency);
-    if (agency && dateRange) {
-      fetchDailyCounts(agency, dateRange[0], dateRange[1]);
+    selectedAgency.current = agency;
+    if (agency && dateRange.current) {
+      fetchDailyCounts(agency, dateRange.current[0], dateRange.current[1]);
     }
   }
 
   function handleDateRangeChange(args: ChangedEventArgs) {
     if (args.value && Array.isArray(args.value) && args.value.length === 2) {
-      setDateRange([args.value[0], args.value[1]]);
-      if (selectedAgency) {
-        fetchDailyCounts(selectedAgency, args.value[0], args.value[1]);
+      dateRange.current = [args.value[0], args.value[1]];
+      if (selectedAgency.current) {
+        fetchDailyCounts(selectedAgency.current, args.value[0], args.value[1]);
       }
     }
   }
@@ -118,7 +125,7 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
         </label>
         <DateRangePickerComponent
           id="daterange"
-          value={dateRange}
+          value={dateRange.current}
           max={new Date()}
           min={new Date(process.env.NEXT_PUBLIC_MIN_DATE ?? "2017-01-01")}
           minDays={3}
@@ -139,6 +146,7 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
         ) : dailyCounts.length > 0 ? (
           <ChartComponent
             id="charts"
+            title="Regulation Changes"
             primaryXAxis={{
               valueType: "DateTime",
               labelFormat: "M/d/yyyy",
@@ -162,7 +170,7 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
                 dataSource={dailyCounts}
                 xName="date"
                 yName="count"
-                name={selectedAgency?.short_name || "Changes"}
+                name={selectedAgency.current?.short_name || "Changes"}
                 type="Line"
                 marker={{
                   visible: true,
@@ -175,7 +183,7 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
           </ChartComponent>
         ) : (
           <p className="text-gray-500">
-            {selectedAgency && dateRange
+            {selectedAgency.current && dateRange.current
               ? "No changes found for this agency and date range."
               : "Select an agency and date range to see the change history."}
           </p>
