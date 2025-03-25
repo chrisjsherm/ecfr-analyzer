@@ -15,11 +15,12 @@ import {
   SeriesDirective,
   Tooltip,
 } from "@syncfusion/ej2-react-charts";
+import { TextBoxComponent } from "@syncfusion/ej2-react-inputs";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import { useRef, useState } from "react";
+import { debounce } from "../../utils/debounce.utils";
 import { Agency } from "../types/agency";
 import { AgencyDropdown } from "./AgencyDropdown";
-
 interface DailyCount {
   date: string;
   count: number;
@@ -36,11 +37,13 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
     new Date(new Date().setDate(new Date().getDate() - 30)),
     new Date(),
   ]);
+  const searchTerm = useRef<string>("");
 
   async function fetchDailyCounts(
     agency: Agency,
     startDate: Date,
-    endDate: Date
+    endDate: Date,
+    query?: string
   ) {
     setIsLoading(true);
     setError(null);
@@ -52,7 +55,11 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
       const formattedStartDate = startDate.toISOString().split("T")[0];
       const formattedEndDate = endDate.toISOString().split("T")[0];
       const response = await fetch(
-        `/api/ecfr/daily-counts?agency_slugs[]=${agency.slug}&last_modified_on_or_after=${formattedStartDate}&last_modified_on_or_before=${formattedEndDate}`,
+        `/api/ecfr/daily-counts?agency_slugs[]=${
+          agency.slug
+        }&last_modified_on_or_after=${formattedStartDate}&last_modified_on_or_before=${formattedEndDate}${
+          query ? `&query=${query}` : ""
+        }`,
         { signal: fetchCtrl.current.signal }
       );
       if (!response.ok) {
@@ -71,7 +78,12 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
   function handleAgencySelect(agency: Agency) {
     selectedAgency.current = agency;
     if (agency && dateRange.current) {
-      fetchDailyCounts(agency, dateRange.current[0], dateRange.current[1]);
+      fetchDailyCounts(
+        agency,
+        dateRange.current[0],
+        dateRange.current[1],
+        searchTerm.current
+      );
     }
   }
 
@@ -79,8 +91,25 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
     if (args.value && Array.isArray(args.value) && args.value.length === 2) {
       dateRange.current = [args.value[0], args.value[1]];
       if (selectedAgency.current) {
-        fetchDailyCounts(selectedAgency.current, args.value[0], args.value[1]);
+        fetchDailyCounts(
+          selectedAgency.current,
+          args.value[0],
+          args.value[1],
+          searchTerm.current
+        );
       }
+    }
+  }
+
+  function handleSearchChange(args: { value: string }) {
+    searchTerm.current = args.value;
+    if (selectedAgency.current && dateRange.current) {
+      fetchDailyCounts(
+        selectedAgency.current,
+        dateRange.current[0],
+        dateRange.current[1],
+        searchTerm.current
+      );
     }
   }
 
@@ -128,13 +157,23 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
           value={dateRange.current}
           max={new Date()}
           min={new Date(process.env.NEXT_PUBLIC_MIN_DATE ?? "2017-01-01")}
-          minDays={3}
-          maxDays={365}
           strictMode={true}
           onChange={handleDateRangeChange}
           format="MM/dd/yyyy"
           placeholder="Select date range"
           cssClass="e-custom-datepicker"
+        />
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="searchTerm" className="flex text-sm font-medium mb-2">
+          Search term
+        </label>
+        <TextBoxComponent
+          id="searchTerm"
+          name="searchTerm"
+          placeholder="Search term (optional)"
+          onChange={debounce(handleSearchChange, 500)}
         />
       </div>
 
@@ -153,7 +192,7 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
               title: "Date",
             }}
             primaryYAxis={{
-              title: "Number of Changes",
+              title: "Change Count",
               labelFormat: "{value}",
             }}
             tooltip={{
