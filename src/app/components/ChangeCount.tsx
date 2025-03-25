@@ -4,6 +4,7 @@ import {
   CalendarComponent,
   ChangedEventArgs,
 } from "@syncfusion/ej2-react-calendars";
+import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import { useState } from "react";
 import { Agency } from "../types/agency";
 import { AgencyDropdown } from "./AgencyDropdown";
@@ -58,16 +59,36 @@ export default function ChangeCount({ agencies }: { agencies: Agency[] }) {
       <div className="mb-4">
         <label
           htmlFor="agency-dropdown"
-          className="block text-sm font-medium mb-2"
+          className="text-sm font-medium mb-2 flex"
         >
           Agency
+          <TooltipComponent content="Required field" target="#agency-required">
+            <span
+              id="agency-required"
+              className="text-red-500"
+              role="img"
+              aria-label="Required field"
+            >
+              *
+            </span>
+          </TooltipComponent>
         </label>
         <AgencyDropdown agencies={agencies} onSelect={handleAgencySelect} />
       </div>
 
       <div className="mb-4">
-        <label htmlFor="calendar" className="block text-sm font-medium mb-2">
+        <label htmlFor="calendar" className="flex text-sm font-medium mb-2">
           Changes From Date
+          <TooltipComponent content="Required field" target="#date-required">
+            <span
+              id="date-required"
+              className="text-red-500"
+              role="img"
+              aria-label="Required field"
+            >
+              *
+            </span>
+          </TooltipComponent>
         </label>
         <CalendarComponent
           id="calendar"

@@ -6,5 +6,6 @@
 @import "../../node_modules/@syncfusion/ej2-popups/styles/tailwind.css";
 @import "../../node_modules/@syncfusion/ej2-react-calendars/styles/tailwind.css";
 @import "../../node_modules/@syncfusion/ej2-react-dropdowns/styles/tailwind.css";
+@import "../../node_modules/@syncfusion/ej2-react-popups/styles/tailwind.css";
 
 @import "tailwindcss";

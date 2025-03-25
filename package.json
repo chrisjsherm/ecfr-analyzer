@@ -14,6 +14,7 @@
     "@syncfusion/ej2-react-charts": "^28.2.11",
     "@syncfusion/ej2-react-dropdowns": "^28.2.12",
     "@syncfusion/ej2-react-grids": "^28.2.12",
+    "@syncfusion/ej2-react-popups": "^29.1.33",
     "next": "15.2.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

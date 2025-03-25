@@ -15,6 +15,7 @@ import {
   SeriesDirective,
   Tooltip,
 } from "@syncfusion/ej2-react-charts";
+import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import { useState } from "react";
 import { Agency } from "../types/agency";
 import { AgencyDropdown } from "./AgencyDropdown";
@@ -81,16 +82,39 @@ export default function ChangeCountChart({ agencies }: { agencies: Agency[] }) {
       <div className="mb-4">
         <label
           htmlFor="agency-dropdown"
-          className="block text-sm font-medium mb-2"
+          className="flex text-sm font-medium mb-2"
         >
           Agency
+          <TooltipComponent content="Required field" target="#agency-required">
+            <span
+              id="agency-required"
+              className="text-red-500"
+              role="img"
+              aria-label="Required field"
+            >
+              *
+            </span>
+          </TooltipComponent>
         </label>
         <AgencyDropdown agencies={agencies} onSelect={handleAgencySelect} />
       </div>
 
       <div className="mb-4">
-        <label htmlFor="daterange" className="block text-sm font-medium mb-2">
+        <label htmlFor="daterange" className="flex text-sm font-medium mb-2">
           Date Range (3-365 days)
+          <TooltipComponent
+            content="Required field"
+            target="#daterange-required"
+          >
+            <span
+              id="daterange-required"
+              className="text-red-500"
+              role="img"
+              aria-label="Required field"
+            >
+              *
+            </span>
+          </TooltipComponent>
         </label>
         <DateRangePickerComponent
           id="daterange"
