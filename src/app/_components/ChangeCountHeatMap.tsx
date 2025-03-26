@@ -6,13 +6,13 @@ import {
   Legend,
   Tooltip,
 } from "@syncfusion/ej2-react-heatmap";
-import { HeatmapData } from "../types/heat-map-data.type";
+import { HeatmapData } from "../../types/heat-map-data.type";
 
 interface HeatMapProps {
   data: HeatmapData[];
 }
 
-export default function HeatMap({ data }: HeatMapProps) {
+export default function ChangeCountHeatMap({ data }: HeatMapProps) {
   const heatmapData = data.map((item) =>
     item.counts.map((count) => count.count)
   );

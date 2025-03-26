@@ -6,7 +6,7 @@ import {
   MultiSelectChangeEventArgs,
   MultiSelectComponent,
 } from "@syncfusion/ej2-react-dropdowns";
-import type { Agency } from "../types/agency.type";
+import type { Agency } from "../../types/agency.type";
 
 interface Props {
   agencies: Agency[];

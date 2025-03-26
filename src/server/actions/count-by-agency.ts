@@ -1,8 +1,8 @@
 import { DateTime } from "luxon";
 import { unstable_cache } from "next/cache";
+import { Agency } from "../../types/agency.type";
+import { HeatmapData } from "../../types/heat-map-data.type";
 import { getDatesInRange, isValidDateFormat } from "../../utils/date.utils";
-import { Agency } from "../types/agency.type";
-import { HeatmapData } from "../types/heat-map-data.type";
 
 /**
  * Get the change counts by day for one or more agencies, cached for 12 hours

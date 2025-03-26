@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import { Agency } from "../../types/agency.type";
-import HeatMap from "../HeatMap";
+import ChangeCountHeatMap from "./ChangeCountHeatMap";
 
 // Mock the Syncfusion HeatMap component since we don't need to test its internal functionality
 jest.mock("@syncfusion/ej2-react-heatmap", () => ({
@@ -30,14 +30,12 @@ describe("HeatMap", () => {
   ];
 
   it("renders no data message when data array is empty", () => {
-    render(<HeatMap data={[]} />);
+    render(<ChangeCountHeatMap data={[]} />);
     expect(screen.getByText("No data available")).toBeInTheDocument();
   });
 
-  it("renders HeatMapComponent when data is provided", () => {
-    render(<HeatMap data={mockData} />);
-
-    // Check if HeatMapComponent is rendered
+  it("renders the component when data is provided", () => {
+    render(<ChangeCountHeatMap data={mockData} />);
     expect(screen.getByTestId("heatmap-component")).toBeInTheDocument();
   });
 });

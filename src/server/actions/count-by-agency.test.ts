@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import { Agency } from "../types/agency.type";
+import { Agency } from "../../types/agency.type";
 import { getChangeCountByAgency } from "./count-by-agency";
 
 // Mock next/cache

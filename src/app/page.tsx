@@ -1,7 +1,7 @@
-import { getAgencies } from "./actions/agencies";
-import { getChangeCountByAgency } from "./actions/count-by-agency";
-import HeatMap from "./components/HeatMap";
-import { HeatmapData } from "./types/heat-map-data.type";
+import { getAgencies } from "../server/actions/agencies";
+import { getChangeCountByAgency } from "../server/actions/count-by-agency";
+import { HeatmapData } from "../types/heat-map-data.type";
+import ChangeCountHeatMap from "./_components/ChangeCountHeatMap";
 
 export default async function Home() {
   const { agencies } = await getAgencies();
@@ -35,7 +35,7 @@ export default async function Home() {
             <p className="text-red-700">{heatmapError}</p>
           </div>
         ) : heatmapData.length > 0 ? (
-          <HeatMap data={heatmapData} />
+          <ChangeCountHeatMap data={heatmapData} />
         ) : (
           <div className="p-4 bg-gray-50 border border-gray-200 rounded-md">
             <p className="text-gray-700">No heatmap data available.</p>
