@@ -19,7 +19,7 @@ import { TextBoxComponent } from "@syncfusion/ej2-react-inputs";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import { useRef, useState } from "react";
 import { debounce } from "../../utils/debounce.utils";
-import { Agency } from "../types/agency";
+import { Agency } from "../types/agency.type";
 import { AgencyDropdown } from "./AgencyDropdown";
 
 interface DailyCount {

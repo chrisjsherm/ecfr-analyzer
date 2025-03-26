@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest --watch"
   },
   "dependencies": {
     "@syncfusion/ej2-icons": "^29.1.33",
@@ -16,8 +16,10 @@
     "@syncfusion/ej2-react-charts": "^28.2.11",
     "@syncfusion/ej2-react-dropdowns": "^28.2.12",
     "@syncfusion/ej2-react-grids": "^28.2.12",
+    "@syncfusion/ej2-react-heatmap": "^29.1.33",
     "@syncfusion/ej2-react-inputs": "^29.1.33",
     "@syncfusion/ej2-react-popups": "^29.1.33",
+    "luxon": "^3.6.0",
     "next": "15.2.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -29,6 +31,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@types/jest": "^29.5.14",
+    "@types/luxon": "^3.4.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
