@@ -16,7 +16,7 @@ global.fetch = jest.fn();
 
 // Mock environment variables
 process.env.ECFR_API_URL = "https://test-api.example.com";
-process.env.ECFR_API_MAX_REQUESTS_PER_SECOND = "10";
+process.env.NEXT_PUBLIC_ECFR_API_MAX_REQUESTS_PER_SECOND = "10";
 process.env.ECFR_API_TIMEZONE = "America/New_York";
 
 describe("getChangeCountByAgency", () => {

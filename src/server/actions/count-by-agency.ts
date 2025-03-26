@@ -19,10 +19,10 @@ export const getChangeCountByAgency = unstable_cache(
   ): Promise<HeatmapData[]> => {
     if (
       agencies.length >
-      parseInt(process.env.ECFR_API_MAX_REQUESTS_PER_SECOND || "10")
+      parseInt(process.env.NEXT_PUBLIC_ECFR_API_MAX_REQUESTS_PER_SECOND || "10")
     ) {
       throw new Error(
-        `Too many agencies. The max number of agencies is ${process.env.ECFR_API_MAX_REQUESTS_PER_SECOND}.`
+        `Too many agencies. The max number of agencies is ${process.env.NEXT_PUBLIC_ECFR_API_MAX_REQUESTS_PER_SECOND}.`
       );
     }
 

@@ -14,6 +14,10 @@ interface Props {
   selectMultiple?: boolean;
 }
 
+const MAX_AGENCIES = parseInt(
+  process.env.NEXT_PUBLIC_ECFR_API_MAX_REQUESTS_PER_SECOND || "10"
+);
+
 /**
  * AgencyDropdown component
  * @param agencies - The list of agencies to display in the dropdown
@@ -39,11 +43,15 @@ export function AgencyDropdown({
         dataSource={agencies as unknown as { [key: string]: object }[]}
         fields={{ text: "name" }}
         allowObjectBinding={true}
-        placeholder="Select one or more agencies"
+        placeholder={`Select up to ${MAX_AGENCIES} agencies`}
         filterBarPlaceholder="Search agencies"
         allowFiltering={true}
         filterType="Contains"
         change={handleMultipleAgenciesSelection}
+        maximumSelectionLength={MAX_AGENCIES}
+        addTagOnBlur={true}
+        changeOnBlur={false}
+        closePopupOnSelect={false}
       />
     );
   }
