@@ -1,7 +1,7 @@
 "use client";
 
 import { registerLicense } from "@syncfusion/ej2-base";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AgencyChangeCounts } from "../../types/agency-change-counts.type";
 import { Agency } from "../../types/agency.type";
 import ChangeCountGrid from "./ChangeCountGrid";
@@ -23,7 +23,21 @@ export default function Dashboard({ agencies }: { agencies: Agency[] }) {
     data: null,
   });
   const [isParametersCollapsed, setIsParametersCollapsed] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
   let abortController = new AbortController();
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobileView(window.innerWidth < 740);
+    }
+
+    // Set initial state and add event listener
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener on unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   function toggleParametersCollapse() {
     setIsParametersCollapsed((prev) => !prev);
@@ -89,29 +103,35 @@ export default function Dashboard({ agencies }: { agencies: Agency[] }) {
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
-      <div className="flex gap-6">
+      <div className={`flex gap-6 ${isMobileView ? "flex-col" : ""}`}>
         {/* Sidebar for Parameter Selection */}
         <aside
           className={`transition-all duration-300 bg-white p-4 rounded-md shadow-md ${
-            isParametersCollapsed ? "w-15" : "w-1/4"
+            isMobileView ? "w-full" : isParametersCollapsed ? "w-15" : "w-1/4"
           }`}
         >
-          <div className="flex items-center gap-2 mb-5">
-            <div>
+          <div className="flex justify-between gap-2 mb-5">
+            <div className="flex items-center gap-2">
               <span className="e-icons e-filter"></span>
-            </div>
 
-            {!isParametersCollapsed && (
-              <h2 className="text-lg font-semibold grow-1">Parameters</h2>
-            )}
+              {!isParametersCollapsed && (
+                <h2 className="text-lg font-semibold grow-1">Parameters</h2>
+              )}
+            </div>
 
             <button
               onClick={toggleParametersCollapse}
-              className="text-sm  cursor-pointer"
+              className="text-sm cursor-pointer"
               aria-label="Toggle Parameters Section"
             >
               {isParametersCollapsed ? (
-                <span className="e-icons e-chevron-right-fill"></span>
+                isMobileView ? (
+                  <span className="e-icons e-chevron-down-fill"></span>
+                ) : (
+                  <span className="e-icons e-chevron-right-fill"></span>
+                )
+              ) : isMobileView ? (
+                <span className="e-icons e-chevron-up-fill"></span>
               ) : (
                 <span className="e-icons e-chevron-left-fill"></span>
               )}
@@ -146,7 +166,7 @@ export default function Dashboard({ agencies }: { agencies: Agency[] }) {
         {/* Main Content */}
         <main
           className={`transition-all duration-300 flex-1 ${
-            isParametersCollapsed ? "w-full" : "w-3/4"
+            isMobileView ? "w-full" : isParametersCollapsed ? "w-full" : "w-3/4"
           }`}
         >
           {/* Grid */}
