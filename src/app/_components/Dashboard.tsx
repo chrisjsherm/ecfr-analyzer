@@ -55,7 +55,7 @@ export default function Dashboard({ agencies }: { agencies: Agency[] }) {
       return;
     }
 
-    setState((prev) => ({ ...prev, isLoading: true, error: null }));
+    setState((prev) => ({ ...prev, isLoading: true, error: null, data: null }));
 
     if (abortController) {
       abortController.abort("New submission, aborting previous request");
@@ -138,29 +138,33 @@ export default function Dashboard({ agencies }: { agencies: Agency[] }) {
             </button>
           </div>
 
-          {!isParametersCollapsed && (
-            <>
-              <ParameterSelection
-                agencies={agencies}
-                onSubmit={handleParameterSubmit}
-              />
+          <div
+            className={`transition-opacity duration-300 ${
+              isParametersCollapsed
+                ? "opacity-0 h-0 overflow-hidden"
+                : "opacity-100 h-auto"
+            }`}
+          >
+            <ParameterSelection
+              agencies={agencies}
+              onSubmit={handleParameterSubmit}
+            />
 
-              {/* Loading State */}
-              {state.isLoading && (
-                <div className="mt-4 p-4 text-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
-                  <p className="mt-2 text-gray-600">Loading data...</p>
-                </div>
-              )}
+            {/* Loading State */}
+            {state.isLoading && (
+              <div className="mt-4 p-4 text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+                <p className="mt-2 text-gray-600">Loading data...</p>
+              </div>
+            )}
 
-              {/* Error State */}
-              {state.error && (
-                <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-md">
-                  <p className="text-red-600">Error: {state.error}</p>
-                </div>
-              )}
-            </>
-          )}
+            {/* Error State */}
+            {state.error && (
+              <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-md">
+                <p className="text-red-600">Error: {state.error}</p>
+              </div>
+            )}
+          </div>
         </aside>
 
         {/* Main Content */}
