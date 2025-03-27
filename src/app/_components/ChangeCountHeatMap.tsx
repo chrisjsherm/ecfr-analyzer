@@ -8,18 +8,15 @@ import {
 } from "@syncfusion/ej2-react-heatmap";
 import { AgencyChangeCounts } from "../../types/agency-change-counts.type";
 import { groupCountsByMonth } from "../../utils/group-by-month";
+import NoDataAvailable from "./NoDataAvailable";
 
 interface HeatMapProps {
   data: AgencyChangeCounts[] | null;
 }
 
 export default function ChangeCountHeatMap({ data }: HeatMapProps) {
-  if (!data) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-gray-500">No data available</p>
-      </div>
-    );
+  if (!data || data.length === 0) {
+    return <NoDataAvailable />;
   }
 
   data = groupCountsByMonth(data);
@@ -31,20 +28,11 @@ export default function ChangeCountHeatMap({ data }: HeatMapProps) {
   return (
     <HeatMapComponent
       dataSource={heatmapData}
-      titleSettings={{
-        text: "Heat Map",
-        textStyle: {
-          size: "16px",
-          fontWeight: "bold",
-        },
-      }}
       yAxis={{
         labels: data[0].counts.map((count) => count.date),
-        title: { text: "Date" },
       }}
       xAxis={{
         labels: data.map((item) => item.agency.short_name),
-        title: { text: "Agency" },
       }}
       renderingMode={"SVG"}
     >

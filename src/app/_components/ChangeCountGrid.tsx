@@ -6,6 +6,7 @@ import {
   GridComponent,
 } from "@syncfusion/ej2-react-grids";
 import { AgencyChangeCounts } from "../../types/agency-change-counts.type";
+import NoDataAvailable from "./NoDataAvailable";
 
 const maxChangeCount = 10000;
 
@@ -18,13 +19,8 @@ export default function ChangeCountGrid({
 }: {
   changeCounts: AgencyChangeCounts[] | null;
 }) {
-  if (!changeCounts) {
-    return (
-      <div>
-        <h2>Change Counts</h2>
-        <p>No data available</p>
-      </div>
-    );
+  if (!changeCounts || changeCounts.length === 0) {
+    return <NoDataAvailable />;
   }
 
   const data = changeCounts.map((agencyChangeCounts) => ({

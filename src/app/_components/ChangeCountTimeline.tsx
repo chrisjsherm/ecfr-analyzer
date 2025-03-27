@@ -12,27 +12,23 @@ import {
   Tooltip,
 } from "@syncfusion/ej2-react-charts";
 import { AgencyChangeCounts } from "../../types/agency-change-counts.type";
+import NoDataAvailable from "./NoDataAvailable";
 
 /**
  * Display a chart of the number of changes for one or more agencies over a date range
  * @param agencies - The list of agencies to display in the dropdown
  */
-export default function ChangeCountChart({
+export default function ChangeCountTimeline({
   data,
 }: {
   data: AgencyChangeCounts[] | null;
 }) {
-  if (!data) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-gray-500">No data available</p>
-      </div>
-    );
+  if (!data || data.length === 0) {
+    return <NoDataAvailable />;
   }
 
   return (
     <ChartComponent
-      title="Timeline"
       primaryXAxis={{
         valueType: "DateTime",
         labelFormat: "M/d/yyyy",
