@@ -1,13 +1,14 @@
 @import "../../node_modules/@syncfusion/ej2-base/styles/tailwind.css";
 
 @import "../../node_modules/@syncfusion/ej2-buttons/styles/tailwind.css";
-@import "../../node_modules/@syncfusion/ej2-lists/styles/tailwind.css";
 @import "../../node_modules/@syncfusion/ej2-icons/styles/tailwind.css";
 @import "../../node_modules/@syncfusion/ej2-inputs/styles/tailwind.css";
+@import "../../node_modules/@syncfusion/ej2-lists/styles/tailwind.css";
 @import "../../node_modules/@syncfusion/ej2-popups/styles/tailwind.css";
 
 @import "../../node_modules/@syncfusion/ej2-react-calendars/styles/tailwind.css";
 @import "../../node_modules/@syncfusion/ej2-react-dropdowns/styles/tailwind.css";
+@import "../../node_modules/@syncfusion/ej2-react-grids/styles/tailwind.css";
 @import "../../node_modules/@syncfusion/ej2-react-inputs/styles//tailwind.css";
 @import "../../node_modules/@syncfusion/ej2-react-popups/styles/tailwind.css";
 

@@ -25,5 +25,5 @@ const getAgenciesData = async () => {
     throw new Error(`Failed to fetch agencies: ${response.statusText}`);
   }
 
-  return response.json();
+  return (await response.json()).agencies;
 };

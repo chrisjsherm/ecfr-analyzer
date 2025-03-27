@@ -6,18 +6,15 @@ import {
   Legend,
   Tooltip,
 } from "@syncfusion/ej2-react-heatmap";
-import { HeatmapData } from "../../types/heat-map-data.type";
+import { AgencyChangeCounts } from "../../types/agency-change-counts.type";
+import { groupCountsByMonth } from "../../utils/group-by-month";
 
 interface HeatMapProps {
-  data: HeatmapData[];
+  data: AgencyChangeCounts[] | null;
 }
 
 export default function ChangeCountHeatMap({ data }: HeatMapProps) {
-  const heatmapData = data.map((item) =>
-    item.counts.map((count) => count.count)
-  );
-
-  if (data.length === 0) {
+  if (!data) {
     return (
       <div className="flex items-center justify-center h-full">
         <p className="text-gray-500">No data available</p>
@@ -25,11 +22,17 @@ export default function ChangeCountHeatMap({ data }: HeatMapProps) {
     );
   }
 
+  data = groupCountsByMonth(data);
+
+  const heatmapData = data.map((agencyChangeCounts) =>
+    agencyChangeCounts.counts.map((dayEntry) => dayEntry.count)
+  );
+
   return (
     <HeatMapComponent
       dataSource={heatmapData}
       titleSettings={{
-        text: "Change Count by Day",
+        text: "Heat Map",
         textStyle: {
           size: "16px",
           fontWeight: "bold",
@@ -43,10 +46,7 @@ export default function ChangeCountHeatMap({ data }: HeatMapProps) {
         labels: data.map((item) => item.agency.short_name),
         title: { text: "Agency" },
       }}
-      cellSettings={{
-        tileType: "Bubble",
-        bubbleType: "Size",
-      }}
+      renderingMode={"SVG"}
     >
       <Inject services={[Legend, Tooltip]} />
     </HeatMapComponent>

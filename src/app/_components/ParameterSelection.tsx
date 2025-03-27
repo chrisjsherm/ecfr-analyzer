@@ -17,8 +17,14 @@ const MAX_AGENCIES = parseInt(
 
 export default function ParameterSelection({
   agencies,
+  onSubmit,
 }: {
   agencies: Agency[];
+  onSubmit: (
+    agencies: Agency[],
+    dateRange: [Date | undefined, Date | undefined],
+    searchTerm: string
+  ) => void;
 }) {
   const selectedAgencies = useRef<Agency[]>([]);
   const dateRange = useRef<[Date | undefined, Date | undefined]>([
@@ -93,11 +99,7 @@ export default function ParameterSelection({
       return;
     }
 
-    console.log(
-      selectedAgencies.current,
-      dateRange.current,
-      searchTerm.current
-    );
+    onSubmit(selectedAgencies.current, dateRange.current, searchTerm.current);
   }
 
   return (

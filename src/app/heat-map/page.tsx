@@ -1,6 +1,6 @@
 import { getAgencies } from "../../server/actions/agencies";
 import { getChangeCountByAgency } from "../../server/actions/count-by-agency";
-import { HeatmapData } from "../../types/heat-map-data.type";
+import { AgencyChangeCounts } from "../../types/agency-change-counts.type";
 import ChangeCountHeatMap from "../_components/ChangeCountHeatMap";
 
 export default async function HeatMap() {
@@ -13,7 +13,7 @@ export default async function HeatMap() {
     .split("T")[0];
 
   // Get agency slugs and fetch heatmap data
-  let heatmapData: HeatmapData[] = [];
+  let heatmapData: AgencyChangeCounts[] = [];
   let heatmapError = null;
 
   try {
