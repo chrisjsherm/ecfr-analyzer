@@ -33,7 +33,6 @@ export async function fetchChangeCountByAgency(
 
   try {
     const agencies = await getAgencies();
-    console.log("agencies", agencies);
     if (!agencies) {
       throw new Error("Failed to fetch agencies");
     }
