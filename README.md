@@ -1,4 +1,10 @@
+# ECFR Analyzer
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Description
+
+ECFR Analyzer is a tool designed to analyze and visualize changes in the Code of Federal Regulations (CFR) by agency, date range, and search terms. It provides interactive charts, heatmaps, and grids to help users explore regulatory changes effectively.
 
 ## Getting Started
 
@@ -34,3 +40,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## License
+
+This project is licensed under the terms of the [GNU General Public License v3.0](LICENSE.md).
