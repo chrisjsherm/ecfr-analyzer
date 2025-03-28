@@ -52,6 +52,8 @@ export function AgencyDropdown({
         addTagOnBlur={true}
         changeOnBlur={false}
         closePopupOnSelect={false}
+        isDeviceFullScreen={false}
+        popupWidth="95%"
       />
     );
   }
