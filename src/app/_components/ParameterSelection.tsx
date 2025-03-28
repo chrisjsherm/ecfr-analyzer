@@ -105,10 +105,7 @@ export default function ParameterSelection({
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-4">
-        <label
-          htmlFor="agency-dropdown"
-          className="flex text-sm font-medium mb-2"
-        >
+        <label htmlFor="agency-dropdown" className="flex  font-medium mb-2">
           Agencies
           <TooltipComponent content="Required field" target="#agency-required">
             <span
@@ -127,12 +124,12 @@ export default function ParameterSelection({
           selectMultiple={true}
         />
         {errors.agencies && (
-          <div className="text-red-500 text-sm mt-1">{errors.agencies}</div>
+          <div className="text-red-500  mt-1">{errors.agencies}</div>
         )}
       </div>
 
       <div className="mb-4">
-        <label htmlFor="dateRange" className="flex text-sm font-medium mb-2">
+        <label htmlFor="dateRange" className="flex font-medium mb-2">
           Date Range (3-365 days)
           <TooltipComponent
             content="Required field"
@@ -163,12 +160,12 @@ export default function ParameterSelection({
           />
         </div>
         {errors.dateRange && (
-          <div className="text-red-500 text-sm mt-1">{errors.dateRange}</div>
+          <div className="text-red-500  mt-1">{errors.dateRange}</div>
         )}
       </div>
 
       <div className="mb-4">
-        <label htmlFor="searchTerm" className="flex text-sm font-medium mb-2">
+        <label htmlFor="searchTerm" className="flex  font-medium mb-2">
           Change Includes
         </label>
         <div className="max-w-md">

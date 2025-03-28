@@ -16,7 +16,7 @@ export default function NoDataAvailable() {
         />
       </svg>
       <p className="text-gray-600 text-lg font-medium">No Data Available</p>
-      <p className="text-gray-500 text-sm mt-1">
+      <p className="text-gray-500 mt-1">
         Please adjust your parameters or try again later.
       </p>
     </div>

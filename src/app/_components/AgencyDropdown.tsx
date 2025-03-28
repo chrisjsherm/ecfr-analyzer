@@ -53,7 +53,6 @@ export function AgencyDropdown({
         changeOnBlur={false}
         closePopupOnSelect={false}
         isDeviceFullScreen={false}
-        popupWidth="95%"
       />
     );
   }

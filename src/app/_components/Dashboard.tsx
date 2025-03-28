@@ -121,7 +121,7 @@ export default function Dashboard({ agencies }: { agencies: Agency[] }) {
 
             <button
               onClick={toggleParametersCollapse}
-              className="text-sm cursor-pointer"
+              className=" cursor-pointer"
               aria-label="Toggle Parameters Section"
             >
               {isParametersCollapsed ? (

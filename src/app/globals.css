@@ -13,3 +13,9 @@
 @import "../../node_modules/@syncfusion/ej2-react-popups/styles/tailwind.css";
 
 @import "tailwindcss";
+.e-input,
+.e-dropdownbase,
+.e-multi,
+.e-list-item {
+  font-size: 16px !important;
+}
